@@ -150,13 +150,14 @@ X_test = test.drop(columns=['instance_id'])
 train
 
 """## Разведочный анализ"""
-
-# Анализ целевой переменной (music_genre)
+st.set_option('deprecation.showPyplotGlobalUse', False)
+"""### Анализ целевой переменной (music_genre)"""
 plt.figure(figsize=(12, 6))
 sns.countplot(y=train['music_genre'], order=train['music_genre'].value_counts().index)
 plt.title('Распределение музыкальных жанров')
 st.pyplot(plt.show())
 
+"""### Анализ рапределения числовых данных"""
 numerical_features = ['acousticness', 'track_name', 'danceability',
                       'energy', 'duration_ms', 'instrumentalness',
                       'liveness', 'loudness', 'speechiness', 'tempo',
@@ -165,14 +166,14 @@ numerical_features = ['acousticness', 'track_name', 'danceability',
 plt.figure(figsize=(16, 10))
 train[numerical_features].hist(bins=30, figsize=(16, 10), layout=(6, 2))
 plt.tight_layout()
-plt.show()
+st.pyplot(plt.show())
 
-# Корреляционная матрица
+"""### Корреляционная матрица"""
 plt.figure(figsize=(12, 8))
 corr_matrix = train[numerical_features].corr()
 sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0)
 plt.title('Корреляционная матрица числовых признаков')
-plt.show()
+st.pyplot(plt.show())
 
 # from statsmodels.stats.outliers_influence import variance_inflation_factor
 # from statsmodels.tools.tools import add_constant
@@ -193,8 +194,8 @@ plt.show()
 
 
 # 4. Анализ категориальных признаков
-sns.countplot(x='key', data=train)
-plt.show()
+# sns.countplot(x='key', data=train)
+# plt.show()
 
 # sns.countplot(x='mode', data=train)
 # plt.show()
@@ -207,7 +208,7 @@ plt.show()
 #     plt.xticks(rotation=90)
 #     plt.title(f'{feature.title()} в зависимости от музыкального жанра')
 
-"""## Работа с признаками"""
+
 
 # Преобразователь для числовых признаков: заполняем пропуски средним значением и масштабируем
 numeric_transformer = Pipeline(steps=[
@@ -228,7 +229,7 @@ preprocessor = ColumnTransformer(
         ('cat', categorical_transformer, [ 'trackname_language'])
     ])
 
-"""## Выбор и обучение моделей"""
+
 
 # Создаем конвейер, включающий предварительную обработку и обучение модели
 model_pipeline = Pipeline(steps=[
@@ -255,9 +256,13 @@ y_pred = model_pipeline.predict(X_val)
 
 # Оценка точности
 accuracy = accuracy_score(y_val, y_pred)
-print(f"Accuracy: {accuracy:.4f}")
-print(classification_report(y_val, y_pred))
+# print(f"Точность: {accuracy:.4f}")
+report = classification_report(y_val, y_pred)
+df_report = pd.DataFrame(report).transpose()
 
+# Отображение отчета в Streamlit
+st.write("### Classification Report")
+st.dataframe(df_report)
 
 
 """## Анализ важности признаков модели"""
@@ -277,10 +282,10 @@ importance_df = pd.DataFrame({
     'importance': feature_importances
 })
 
-# Визуализация важности признаков
+"""### Визуализация важности признаков"""
 plt.figure(figsize=(12, 8))
 sns.barplot(x='importance', y='features', data=importance_df)
 plt.xlabel("Важность признаков")
 plt.ylabel("Признаки")
-plt.show()
+st.pyplot(plt.show())
 
