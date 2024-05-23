@@ -237,10 +237,18 @@ importance_df = pd.DataFrame({
     'importance': feature_importances
 })
 
-"""**Визуализация важности признаков**"""
+# Создаем фигуру и ось
 fig, ax = plt.subplots(figsize=(12, 8))
-sns.barplot(x='importance', y='features', data=importance_df, ax=ax)
-ax.xlabel("Важность признаков")
-ax.ylabel("Признаки")
-st.pyplot(fig)
 
+# Строим barplot с использованием оси 'ax'
+sns.barplot(x='importance', y='features', data=importance_df, ax=ax)
+
+# Устанавливаем метки осей
+ax.set_xlabel("Важность признаков")
+ax.set_ylabel("Признаки")
+
+# Устанавливаем заголовок (если требуется)
+ax.set_title("Важность признаков по данным модели")
+
+# Отображаем график с помощью Streamlit
+st.pyplot(fig)
