@@ -142,7 +142,7 @@ sns.countplot(y=train['music_genre'], order=train['music_genre'].value_counts().
 ax.set_title('Распределение музыкальных жанров')
 st.pyplot(fig)
 
-"""**Анализ рапределения числовых данных**"""
+"""**Анализ распределения числовых данных**"""
 numerical_features = ['acousticness', 'track_name', 'danceability',
                       'energy', 'duration_ms', 'instrumentalness',
                       'liveness', 'loudness', 'speechiness', 'tempo',
