@@ -161,7 +161,7 @@ st.pyplot(fig)
 fig, ax = plt.subplots(figsize=(12, 8))
 corr_matrix = train[numerical_features].corr()
 sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0, ax=ax)
-ax.title('Корреляционная матрица числовых признаков')
+ax.set_title('Корреляционная матрица числовых признаков')
 st.pyplot(fig)
 
 
