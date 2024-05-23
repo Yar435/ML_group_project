@@ -148,9 +148,13 @@ numerical_features = ['acousticness', 'track_name', 'danceability',
                       'liveness', 'loudness', 'speechiness', 'tempo',
                       'valence', 'contains_ideograph']
 
-fig, ax = plt.subplots(figsize=(16, 10))
-train[numerical_features].hist(bins=30, figsize=(16, 10), layout=(6, 2), ax=ax)
-ax.tight_layout()
+fig, axes = plt.subplots(6, 2, figsize=(16, 10))
+axes = axes.flatten()
+# Plotting histograms
+for ax, feature in zip(axes, numerical_features):
+    ax.hist(train[feature], bins=30)
+    ax.set_title(feature)
+plt.tight_layout()
 st.pyplot(fig)
 
 """**Корреляционная матрица**"""
