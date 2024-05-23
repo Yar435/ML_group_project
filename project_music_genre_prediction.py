@@ -91,20 +91,6 @@ train
 
 """
 
-# pip install notebook
-
-# объявляем три синтетических признака
-
-# Функция для определения языка строки
-# def detect_language(text):
-#     try:
-#         return detect(text)
-#     except LangDetectException:
-#         return 'unknown'
-#
-# train['trackname_language'] = train['track_name'].apply(detect_language)
-#
-# train.to_csv('lang.csv', index=False)
 language = pd.read_csv('lang_503921.csv')
 train['trackname_language'] = language['trackname_language']
 
@@ -150,14 +136,13 @@ X_test = test.drop(columns=['instance_id'])
 train
 
 """## Разведочный анализ"""
-st.set_option('deprecation.showPyplotGlobalUse', False)
-"""### Анализ целевой переменной (music_genre)"""
-plt.figure(figsize=(12, 6))
-sns.countplot(y=train['music_genre'], order=train['music_genre'].value_counts().index)
-plt.title('Распределение музыкальных жанров')
-st.pyplot(plt.show())
+"""**Анализ целевой переменной (music_genre)**"""
+fig, ax = plt.subplots(figsize=(12, 6))
+sns.countplot(y=train['music_genre'], order=train['music_genre'].value_counts().index, ax=ax)
+ax.title('Распределение музыкальных жанров')
+st.pyplot(fig)
 
-"""### Анализ рапределения числовых данных"""
+"""**Анализ рапределения числовых данных**"""
 numerical_features = ['acousticness', 'track_name', 'danceability',
                       'energy', 'duration_ms', 'instrumentalness',
                       'liveness', 'loudness', 'speechiness', 'tempo',
@@ -168,46 +153,12 @@ train[numerical_features].hist(bins=30, figsize=(16, 10), layout=(6, 2))
 plt.tight_layout()
 st.pyplot(plt.show())
 
-"""### Корреляционная матрица"""
+"""**Корреляционная матрица**"""
 plt.figure(figsize=(12, 8))
 corr_matrix = train[numerical_features].corr()
 sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0)
 plt.title('Корреляционная матрица числовых признаков')
 st.pyplot(plt.show())
-
-# from statsmodels.stats.outliers_influence import variance_inflation_factor
-# from statsmodels.tools.tools import add_constant
-#
-# train[numerical_features] = train[numerical_features].fillna(train[numerical_features].median())
-#
-# df_with_constant = add_constant(train[numerical_features])
-#
-# # Расчет VIF для каждого признака
-# vif_data = pd.DataFrame()
-# vif_data["feature"] = df_with_constant.columns
-#
-# vif_data["VIF"] = [variance_inflation_factor(df_with_constant.values, i)
-#                     for i in range(df_with_constant.shape[1])]
-#
-# print(vif_data)
-
-
-
-# 4. Анализ категориальных признаков
-# sns.countplot(x='key', data=train)
-# plt.show()
-
-# sns.countplot(x='mode', data=train)
-# plt.show()
-
-# ['acousticness', 'danceability', 'duration_ms', 'instrumentalness', 'liveness', 'loudness', 'speechiness', 'tempo', 'valence']
-# ['danceability', 'speechiness', 'valence']
-# for feature in ['key', 'mode', 'trackname_language']:
-#     plt.figure(figsize=(12, 6))
-#     sns.boxplot(x='music_genre', y=feature, data=train, palette="Set3")
-#     plt.xticks(rotation=90)
-#     plt.title(f'{feature.title()} в зависимости от музыкального жанра')
-
 
 
 # Преобразователь для числовых признаков: заполняем пропуски средним значением и масштабируем
@@ -282,7 +233,7 @@ importance_df = pd.DataFrame({
     'importance': feature_importances
 })
 
-"""### Визуализация важности признаков"""
+"""**Визуализация важности признаков**"""
 plt.figure(figsize=(12, 8))
 sns.barplot(x='importance', y='features', data=importance_df)
 plt.xlabel("Важность признаков")
