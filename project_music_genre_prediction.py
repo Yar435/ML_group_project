@@ -139,7 +139,7 @@ train
 """**Анализ целевой переменной (music_genre)**"""
 fig, ax = plt.subplots(figsize=(12, 6))
 sns.countplot(y=train['music_genre'], order=train['music_genre'].value_counts().index, ax=ax)
-ax.title('Распределение музыкальных жанров')
+ax.set_title('Распределение музыкальных жанров')
 st.pyplot(fig)
 
 """**Анализ рапределения числовых данных**"""
