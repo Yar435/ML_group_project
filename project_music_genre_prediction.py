@@ -147,6 +147,8 @@ X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=TEST_SIZE, ran
 # Подготовим тестовые данные(для использования в будущем)
 X_test = test.drop(columns=['instance_id'])
 
+train
+
 """## Разведочный анализ"""
 
 # Анализ целевой переменной (music_genre)
