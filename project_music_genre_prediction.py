@@ -148,17 +148,17 @@ numerical_features = ['acousticness', 'track_name', 'danceability',
                       'liveness', 'loudness', 'speechiness', 'tempo',
                       'valence', 'contains_ideograph']
 
-plt.figure(figsize=(16, 10))
-train[numerical_features].hist(bins=30, figsize=(16, 10), layout=(6, 2))
-plt.tight_layout()
-st.pyplot(plt.show())
+fig, ax = plt.subplots(figsize=(16, 10))
+train[numerical_features].hist(bins=30, figsize=(16, 10), layout=(6, 2), ax=ax)
+ax.tight_layout()
+st.pyplot(fig)
 
 """**Корреляционная матрица**"""
-plt.figure(figsize=(12, 8))
+fig, ax = plt.subplots(figsize=(12, 8))
 corr_matrix = train[numerical_features].corr()
-sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0)
-plt.title('Корреляционная матрица числовых признаков')
-st.pyplot(plt.show())
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0, ax=ax)
+ax.title('Корреляционная матрица числовых признаков')
+st.pyplot(fig)
 
 
 # Преобразователь для числовых признаков: заполняем пропуски средним значением и масштабируем
@@ -208,7 +208,7 @@ y_pred = model_pipeline.predict(X_val)
 # Оценка точности
 accuracy = accuracy_score(y_val, y_pred)
 # print(f"Точность: {accuracy:.4f}")
-report = classification_report(y_val, y_pred)
+report = classification_report(y_val, y_pred, target_names=train['music_genre'].unique(), output_dict=True)
 df_report = pd.DataFrame(report).transpose()
 
 # Отображение отчета в Streamlit
@@ -234,9 +234,9 @@ importance_df = pd.DataFrame({
 })
 
 """**Визуализация важности признаков**"""
-plt.figure(figsize=(12, 8))
-sns.barplot(x='importance', y='features', data=importance_df)
-plt.xlabel("Важность признаков")
-plt.ylabel("Признаки")
-st.pyplot(plt.show())
+fig, ax = plt.subplots(figsize=(12, 8))
+sns.barplot(x='importance', y='features', data=importance_df, ax=ax)
+ax.xlabel("Важность признаков")
+ax.ylabel("Признаки")
+st.pyplot(fig)
 
